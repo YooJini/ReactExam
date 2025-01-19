@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import TodoModal from "./TodoModal";
 
 type Todo = {
   id: number;
@@ -19,6 +20,9 @@ const TodoList: React.FC = () => {
 
   const [newTodo, setNewTodo] = useState<string>("");
 
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo|null>(null);
+
   const handleCheckedChange = (itemId: number) => {
     setTodos((prevItems) =>
       prevItems.map((item) =>
@@ -37,6 +41,19 @@ const TodoList: React.FC = () => {
     }
   };
 
+  const removeTodo = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const handleTodoClick = (todo: Todo) => {
+    setShowDetail(true);
+    setSelectedTodo(todo);
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+  };
+
   return (
     <div>
       <h1>{title}</h1>
@@ -48,7 +65,9 @@ const TodoList: React.FC = () => {
             style={{ marginRight: "10px", writingMode: "horizontal-tb" }}
             onChange={(e) => setNewTodo(e.target.value)}
           />
-          <Button variant="light" onClick={addTodo}>추가</Button>
+          <Button variant="light" onClick={addTodo}>
+            추가
+          </Button>
         </div>
         <p></p>
         <div className="board">
@@ -61,18 +80,25 @@ const TodoList: React.FC = () => {
                     handleCheckedChange(todo.id);
                   }}
                 ></input>
-                <span>
+                <span onClick={()=>handleTodoClick(todo)}>
                   {todo.isChecked ? (
                     <del>{todo.content}</del>
                   ) : (
                     <span>{todo.content}</span>
                   )}
                 </span>
+                <button
+                  className="del-button"
+                  onClick={() => removeTodo(todo.id)}
+                >
+                  삭제
+                </button>
               </li>
             ))}
           </ul>
         </div>
       </div>
+      <TodoModal show={showDetail} todo = {selectedTodo} handleClose={handleCloseDetail}></TodoModal>
     </div>
   );
 };

@@ -2,6 +2,18 @@ h1{
   color: white;
 }
 
+.del-button{
+  color: white;
+  background-color: red;
+  border: 1px solid red;
+  border-radius: 8px;
+  margin: 10px 15px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  /* text-align: center; */
+}
+
 .board{
   background-color:honeydew;
   border-radius: 8px;
